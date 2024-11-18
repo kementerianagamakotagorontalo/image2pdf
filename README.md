@@ -39,7 +39,7 @@ To use the application locally or deploy it:
 
 1. Clone the repository:
   
-   git clone https://github.com/your-username/tolopani-image-to-pdf.git
+   git clone https://github.com/tuwiliyt/tolopani-image-to-pdf.git
 2. Navigate to the project directory:
     ```bash
    cd tolopani-image-to-pdf
