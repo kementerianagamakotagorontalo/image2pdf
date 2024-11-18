@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOLOPANI Image to Pdf</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #8e44ad, #9b59b6);
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        #canvas {
+            margin-top: 20px;
+            border: 2px solid white;
+            width: 100%;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            background-color: #3498db;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            padding: 10px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #2980b9;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+        }
+
+        .message {
+            font-size: 1rem;
+            color: #ffcc00;
+            margin-top: 10px;
+        }
+
+        .orientation-select {
+            margin-top: 10px;
+            color: white;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TOLOPANI Image to Pdf</h1>
+        <input type="file" id="image-upload" accept="image/*" />
+        <canvas id="canvas"></canvas>
+
+        <div class="orientation-select">
+            <label for="orientation">Pilih Orientasi:</label>
+            <select id="orientation">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+            </select>
+        </div>
+
+        <div class="controls">
+            <button id="zoom-in">Zoom In</button>
+            <button id="zoom-out">Zoom Out</button>
+            <button id="save-pdf">Save as PDF</button>
+            <button id="new-convert">New Convert</button>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
