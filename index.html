@@ -1,106 +1,87 @@
-<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TOLOPANI Image to Pdf</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(45deg, #8e44ad, #9b59b6);
-            font-family: 'Press Start 2P', cursive;
-            color: white;
-            text-align: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-
-        #canvas {
-            margin-top: 20px;
-            border: 2px solid white;
-            width: 100%;
-        }
-
-        .controls {
-            margin-top: 20px;
-        }
-
-        .controls button {
-            background-color: #3498db;
-            color: white;
-            font-size: 1.2rem;
-            border: none;
-            padding: 10px;
-            margin: 10px 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .controls button:hover {
-            background-color: #2980b9;
-        }
-
-        input[type="file"] {
-            margin-top: 20px;
-            padding: 10px;
-        }
-
-        .message {
-            font-size: 1rem;
-            color: #ffcc00;
-            margin-top: 10px;
-        }
-
-        .orientation-select {
-            margin-top: 10px;
-            color: white;
-            font-size: 1.2rem;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>TOLOPANI Image to Pdf</h1>
-        <input type="file" id="image-upload" accept="image/*" />
-        <canvas id="canvas"></canvas>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-300 via-purple-400 to-purple-500 font-['Poppins'] text-white text-center p-4">
+    <div class="container max-w-lg p-6 bg-black bg-opacity-60 rounded-lg shadow-lg">
+        <h1 class="text-3xl mb-6">TOLOPANI Image to Pdf</h1>
+        <input type="file" id="image-upload" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 mb-4" />
+        <canvas id="canvas" class="w-full border-2 border-white mt-4"></canvas>
 
-        <div class="orientation-select">
-            <label for="orientation">Pilih Orientasi:</label>
-            <select id="orientation">
+        <div class="orientation-select mt-4">
+            <label for="orientation" class="block text-lg">Pilih Orientasi:</label>
+            <select id="orientation" class="block w-full mt-2 p-2 bg-gray-700 text-white rounded">
                 <option value="portrait">Portrait</option>
                 <option value="landscape">Landscape</option>
             </select>
         </div>
 
-        <div class="controls">
-            <button id="zoom-in">Zoom In</button>
-            <button id="zoom-out">Zoom Out</button>
-            <button id="save-pdf">Save as PDF</button>
-            <button id="new-convert">New Convert</button>
+        <div class="controls mt-6 flex flex-wrap justify-center gap-2">
+            <button id="zoom-in" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Zoom In</button>
+            <button id="zoom-out" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Zoom Out</button>
+            <button id="save-pdf" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save as PDF</button>
+            <button id="new-convert" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">New Convert</button>
         </div>
 
-        <div class="message" id="message"></div>
+        <div class="message mt-4 text-yellow-400 text-sm" id="message"></div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // JavaScript code to handle image upload, zoom, and PDF generation
+        const { jsPDF } = window.jspdf;
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let img = new Image();
+        let scale = 1;
+
+        document.getElementById('image-upload').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                img.src = event.target.result;
+                img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('zoom-in').addEventListener('click', () => {
+            scale += 0.1;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+        });
+
+        document.getElementById('zoom-out').addEventListener('click', () => {
+            scale = Math.max(0.1, scale - 0.1);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+        });
+
+        document.getElementById('save-pdf').addEventListener('click', () => {
+            const orientation = document.getElementById('orientation').value;
+            const pdf = new jsPDF({
+                orientation: orientation,
+                unit: 'px',
+                format: [canvas.width, canvas.height]
+            });
+            pdf.addImage(canvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, canvas.width, canvas.height);
+            pdf.save('download.pdf');
+        });
+
+        document.getElementById('new-convert').addEventListener('click', () => {
+            document.getElementById('image-upload').value = '';
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('message').textContent = '';
+        });
+    </script>
 </body>
 </html>
